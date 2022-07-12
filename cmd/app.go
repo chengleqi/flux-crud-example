@@ -101,4 +101,13 @@ func main() {
 	}
 	// print the reconciliation status
 	fmt.Println(meta.FindStatusCondition(helmRelease.Status.Conditions, apimeta.ReadyCondition).Message)
+
+	// uninstall the release and delete the repository
+	if err := kubeClient.Delete(ctx, helmRelease); err != nil {
+		fmt.Println(err)
+	}
+	if err := kubeClient.Delete(ctx, helmRepository); err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println("Helm repository and release deleted")
 }
